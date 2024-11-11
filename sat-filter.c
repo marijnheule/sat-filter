@@ -23,6 +23,7 @@ int main (int argc, char** argv) {
 
   while (1) {
     int lit;
+    tmp = fscanf (assignment, " v ");
     tmp = fscanf (assignment, " %i ", &lit);
     if (lit > 0) truth[ lit] =  1;
     if (lit < 0) truth[-lit] = -1;
@@ -38,19 +39,23 @@ int main (int argc, char** argv) {
   while (1) {
     int lit = 0;
     tmp = fscanf (cnf, " %i ", &lit);
-    if (lit != 0) {
-      clause[size++] = lit;
-      if (lit > 0 && truth[ lit] ==  1) sat = 1;
-      if (lit < 0 && truth[-lit] == -1) sat = 1;
-    }
-    if (lit == 0) {
-      if (sat == 0) {
-        for (int i = 0; i < size; i++)
-          printf ("%i ", clause[i]);
-        printf ("0\n");
+
+    if (tmp == 1) {
+      if (lit != 0) {
+        clause[size++] = lit;
+        if (sat == 0 && lit > 0 && truth[ lit] ==  1) { sat = 1; }
+        if (sat == 0 && lit < 0 && truth[-lit] == -1) { sat = 1; }
       }
-      sat  = 1;
-      size = 0;
+
+      if (lit == 0) {
+        if (sat == 0) {
+          for (int i = 0; i < size; i++)
+            printf ("%i ", clause[i]);
+          printf ("0\n");
+        }
+        sat  = 0;
+        size = 0;
+      }
     }
 
     if (tmp == EOF) break;
